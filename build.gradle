@@ -1,0 +1,32 @@
+plugins {
+    id 'java'
+}
+
+tasks.register('printConfiguration') {
+    doLast {
+        // 환경 변수를 우선적으로 사용하고, 환경 변수가 없으면 gradle.properties 값 사용
+        def rssUrl = System.getenv('RSS_URL') ?: project.findProperty('rssUrl')
+        def repoPath = System.getenv('REPO_PATH') ?: project.findProperty('repoPath')
+        def postsDir = System.getenv('POSTS_DIR') ?: project.findProperty('postsDir')
+
+        println "RSS URL: ${rssUrl}"
+        println "Repository Path: ${repoPath}"
+        println "Posts Directory: ${postsDir}"
+    }
+}
+
+group = 'com.faulty'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+
+test {
+    useJUnitPlatform()
+}
