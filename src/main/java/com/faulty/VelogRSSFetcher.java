@@ -6,6 +6,9 @@ import com.rometools.rome.io.FeedException;
 import com.rometools.rome.io.SyndFeedInput;
 import com.rometools.rome.io.XmlReader;
 import com.vladsch.flexmark.html2md.converter.FlexmarkHtmlConverter;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 
 import java.io.IOException;
 import java.net.URL;
@@ -31,7 +34,7 @@ public class VelogRSSFetcher {
             for (SyndEntry entry : feed.getEntries()) {
                 String feedName = entry.getTitle().replace("/", "-").replace("\\", "-") + ".md";
                 String sourceHtml = entry.getDescription().getValue();
-                String sourceMarkdown = converter.convert(sourceHtml);
+                String sourceMarkdown = converter.convert(removeIdTag(sourceHtml));
 
                 feeds.put(feedName, sourceMarkdown);
             }
@@ -42,4 +45,11 @@ public class VelogRSSFetcher {
         return feeds;
     }
 
+    public String removeIdTag(String content){
+        Document doc = Jsoup.parse(content);
+        for (Element element : doc.select("[id]")) {
+            element.removeAttr("id");
+        }
+        return doc.body().html();
+    }
 }
