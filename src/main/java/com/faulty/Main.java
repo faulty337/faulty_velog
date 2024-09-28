@@ -8,7 +8,7 @@ public class Main {
         String repoPath = System.getProperty("REPO_PATH");
         String postsDir = System.getProperty("POSTS_DIR");
         String velogUrl = System.getProperty("RSS_URL");
-        
+
         VelogRSSFetcher velogRSSFetcher = new VelogRSSFetcher(velogUrl);
         Map<String, String> feeds = velogRSSFetcher.getFeedSource();
 
