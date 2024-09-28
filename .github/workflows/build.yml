@@ -1,0 +1,38 @@
+name: Build and Commit Markdown Files
+
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: "0 23 * * *"
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'
+
+      - name: Build with Gradle
+        run: ./gradlew build
+
+      - name: Run Java Application with Gradle
+        run: ./gradlew run
+        env:
+          RSS_URL: "https://api.velog.io/rss/@faulty337"
+          REPO_PATH: "."
+          POSTS_DIR: "velog-posts"
+
+      - name: Commit and Push Changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -m "Add Markdown files from Velog feed"
+          git push
