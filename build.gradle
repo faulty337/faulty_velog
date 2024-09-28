@@ -25,6 +25,9 @@ repositories {
 dependencies {
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
+    implementation 'com.rometools:rome:1.18.0'
+    implementation 'com.vladsch.flexmark:flexmark-all:0.64.0'
+
 }
 
 test {
