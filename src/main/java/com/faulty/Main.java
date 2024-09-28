@@ -4,17 +4,23 @@ import java.util.Map;
 
 public class Main {
 
-    private static String repoPath = ".";
-    private static String postsDir = "velog-posts";
-    private static String velogUrl = "https://api.velog.io/rss/@faulty337";
     public static void main(String[] args) {
+        String repoPath = System.getProperty("REPO_PATH");
+        String postsDir = System.getProperty("POSTS_DIR");
+        String velogUrl = System.getProperty("RSS_URL");
+
+        System.out.println("repoPath: " + repoPath);
+        System.out.println("postsDir: " + postsDir);
+        System.out.println("velogUrl: " + velogUrl);
+
         VelogRSSFetcher velogRSSFetcher = new VelogRSSFetcher(velogUrl);
         Map<String, String> feeds = velogRSSFetcher.getFeedSource();
 
         FileSaver fileSaver = new FileSaver();
         for(String key : feeds.keySet()) {
             try{
-                fileSaver.saveMarkdown(repoPath, postsDir, key.replace(".md", ""), feeds.get(key));
+                String fileName = key.endsWith(".md") ? key.substring(0, key.length() - 3) : key; //key에 .md 확장자 붙어 있음
+                fileSaver.saveMarkdown(repoPath, postsDir, fileName, feeds.get(key));
             }catch(Exception e){
                 System.out.println(e.getMessage());
             }
